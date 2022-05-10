@@ -13,39 +13,50 @@
       ]
     },
     {
-      "id": 2,
-      "user_id": "test2",
-      "mail": "test2@example.jp",
       "age": 25,
       "gender": 2,
-      "job": "美容師",
       "interests": [
         "ショッピング",
         "カフェ巡り"
-      ]
+      ],
+      "job": "美容師",
+      "mail": "test2@example.jp",
+      "user_id": "テスト２",
+      "id": 2
     },
     {
-      "mail": "test@test.com",
-      "age": 11,
-      "gender": null,
-      "job": "",
+      "user_id": "テスト",
+      "job": "花屋店員",
+      "mail": "this_is_test@test.com",
+      "gender": "2",
       "interests": [
-        "工作",
-        "音楽鑑賞"
+        "ゲーム",
+        "音楽鑑賞",
+        "テスト"
       ],
+      "age": "12",
       "id": 3
     },
     {
-      "mail": "test@test.com",
-      "age": 12,
-      "gender": 1,
-      "job": "建設作業員",
+      "user_id": "dwa",
+      "job": "dawdwa",
+      "mail": "dwadw",
+      "gender": "2",
       "interests": [
-        "クリケット",
         "プログラミング",
-        "工作"
+        "aa"
       ],
+      "age": "25",
       "id": 4
+    },
+    {
+      "user_id": "",
+      "job": "",
+      "mail": "",
+      "gender": 1,
+      "interests": [],
+      "age": null,
+      "id": 5
     }
   ]
 }

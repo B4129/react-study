@@ -6,11 +6,11 @@ import {
   RadioGroup,
 } from "@mui/material";
 
-import { FC, useContext } from "react";
-import { UserContext } from "../../../../../context/UserContext";
+import { FC } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
 export const Gender: FC = () => {
-  const { setGender } = useContext(UserContext);
+  const { control } = useFormContext(); // retrieve all hook methods
 
   const genderOptions = [
     {
@@ -30,24 +30,22 @@ export const Gender: FC = () => {
   return (
     <FormControl>
       <FormLabel id="gender-radio">性別</FormLabel>
-      <RadioGroup
-        row
-        aria-labelledby="gender-radio"
-        name="radio-group"
-        defaultValue={1}
-        onChange={(e) => {
-          setGender(Number(e.target.value));
-        }}
-      >
-        {genderOptions.map((option) => (
-          <FormControlLabel
-            key={option.value}
-            value={option.value}
-            control={<Radio />}
-            label={option.text}
-          />
-        ))}
-      </RadioGroup>
+      <Controller
+        control={control}
+        name={"gender"}
+        render={({ field }) => (
+          <RadioGroup row aria-labelledby="gender-radio" {...field}>
+            {genderOptions.map((option) => (
+              <FormControlLabel
+                key={option.value}
+                value={option.value}
+                control={<Radio />}
+                label={option.text}
+              />
+            ))}
+          </RadioGroup>
+        )}
+      />
     </FormControl>
   );
 };

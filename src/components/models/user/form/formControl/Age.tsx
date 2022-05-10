@@ -1,22 +1,20 @@
-import { Autocomplete, InputProps, TextField } from "@mui/material";
-import { FC, useContext } from "react";
-import { UserContext } from "../../../../../context/UserContext";
+import { InputProps, TextField } from "@mui/material";
+import { FC } from "react";
+import { useFormContext } from "react-hook-form";
 
 export const Age: FC = () => {
-  const { age, setAge } = useContext(UserContext);
   const inputProps: Partial<InputProps> = {
     inputProps: { min: 0, max: 100 },
   };
+  const { register } = useFormContext(); // retrieve all hook methods
+
   return (
     <TextField
+      {...register("age")}
       InputProps={inputProps}
       label={"年齢"}
-      value={age}
       variant="standard"
       type={"number"}
-      onChange={(e) => {
-        setAge(Number(e.target.value));
-      }}
     />
   );
 };

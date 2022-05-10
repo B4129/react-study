@@ -1,16 +1,18 @@
-import { TextField } from "@mui/material";
-import { FC, useContext } from "react";
-import { UserContext } from "../../../../../context/UserContext";
+import { FormHelperText, TextField } from "@mui/material";
+import { FC } from "react";
+import { useFormContext } from "react-hook-form";
 
 export const Id: FC = () => {
-  const { id } = useContext(UserContext);
+  const { register } = useFormContext(); // retrieve all hook methods
 
   return (
-    <TextField
-      label={"ID"}
-      value={id}
-      variant="standard"
-      inputProps={{ readOnly: true }}
-    ></TextField>
+    <>
+      <TextField
+        label={"ID"}
+        {...register("id")}
+        variant="standard"
+        inputProps={{ readOnly: true }}
+      />
+    </>
   );
 };

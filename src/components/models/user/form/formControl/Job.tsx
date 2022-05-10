@@ -1,19 +1,13 @@
-import {
-  Autocomplete,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
-import { FC, useContext } from "react";
-import { UserContext } from "../../../../../context/UserContext";
+import { Autocomplete, TextField } from "@mui/material";
+import { FC } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
 export const Job: FC = () => {
-  const { job ,setJob} = useContext(UserContext);
+  const { control, setValue, getValues } = useFormContext(); // retrieve all hook methods
+
   const onChangeJobs = (e: any, value: any) => {
-     if (typeof value === "string") return  setJob(value);
-    setJob(value.value);
+    if (typeof value === "string") return setValue("job", value);
+    setValue("job", value.value);
   };
   const jobOptions = [
     {
@@ -30,17 +24,29 @@ export const Job: FC = () => {
     },
   ];
   return (
-    <Autocomplete
-      disablePortal
-      freeSolo
-      options={jobOptions}
-      noOptionsText={"候補が存在しません"}
-      onChange={onChangeJobs}
-      onInputChange={(event, newInputValue) => {
-        setJob(newInputValue)
-      }}
-      renderInput={(params) => (
-        <TextField {...params} label={"職業"} value={job} variant="standard"     />
+    <Controller
+      control={control}
+      name={"job"}
+      render={({ field: { onChange, value } }) => (
+        <Autocomplete
+          disablePortal
+          freeSolo
+          options={jobOptions}
+          noOptionsText={"候補が存在しません"}
+          onChange={onChangeJobs}
+          onInputChange={(event, newInputValue) => {
+            setValue("job", newInputValue);
+          }}
+          value={value}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={"職業"}
+              onChange={onChange}
+              variant="standard"
+            />
+          )}
+        />
       )}
     />
   );

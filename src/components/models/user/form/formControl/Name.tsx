@@ -1,18 +1,9 @@
 import { TextField } from "@mui/material";
-import { FC, useContext } from "react";
-import { UserContext } from "../../../../../context/UserContext";
+import { FC } from "react";
+import { useFormContext } from "react-hook-form";
 
 export const Name: FC = () => {
-  const { name, setName } = useContext(UserContext);
+  const { register } = useFormContext(); // retrieve all hook methods
 
-  return (
-    <TextField
-      label={"名前"}
-      value={name}
-      variant="standard"
-      onChange={(e) => {
-        setName(e.target.value);
-      }}
-    />
-  );
+  return <TextField label={"名前"} {...register("name")} variant="standard" />;
 };

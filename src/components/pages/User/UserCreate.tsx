@@ -1,54 +1,19 @@
 import { Button, Card, Grid, Typography } from "@mui/material";
-import {FC, useContext, useEffect, useState} from "react";
-import { UserForm } from "../../models/user/form/Index";
+import { FC, useContext, useEffect, useState } from "react";
+import { UserCreateForm } from "../../models/user/form";
 import { useNavigate } from "react-router-dom";
-import {
-  defaultUserAge,
-  defaultUserGender,
-  defaultUserInterests,
-  defaultUserId,
-  defaultUserJob,
-  defaultUserMail,
-  defaultUserName,
-  UserAgeType,
-  UserContext,
-  UserGenderType,
-  UserInterestsType,
-  UserIdType,
-  UserJobType,
-  UserMailType,
-  UserNameType,
-} from "../../../context/UserContext";
-import {UserConfirmDialog} from "../../models/user/UserConfirmDialog";
-import axios from "axios";
-import {MessageContext} from "../../../context/MessageContext";
+
+import { UserConfirmDialog } from "../../models/user/UserConfirmDialog";
+import { MessageContext } from "../../../context/MessageContext";
+import { UserTypes } from "../../../types/UserTypes";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useDomain } from "../../../hooks/useDomain";
+import * as yup from "yup";
+import { useForm, FormProvider } from "react-hook-form";
+import { useCreateUser } from "../../../hooks/users/useCreateUser";
 
 export const UserCreate: FC = () => {
-  const [id, setId] = useState<UserIdType>(defaultUserId.id);
-  const [name, setName] = useState<UserNameType>(defaultUserName.name);
-  const [age, setAge] = useState<UserAgeType>(defaultUserAge.age);
-  const [mail, setMail] = useState<UserMailType>(defaultUserMail.mail);
-  const [job, setJob] = useState<UserJobType>(defaultUserJob.job);
-  const [gender, setGender] = useState<UserGenderType>(
-    defaultUserGender.gender
-  );
-  const [interests, setInterests] = useState<UserInterestsType>(defaultUserInterests.interests);
-  const userFormValue = {
-    id,
-    setId,
-    name,
-    setName,
-    age,
-    setAge,
-    mail,
-    setMail,
-    job,
-    setJob,
-    gender,
-    setGender,
-    interests,
-    setInterests,
-  };
+  const { create } = useCreateUser();
   const { setMessage } = useContext(MessageContext);
   useEffect(() => {
     document.title = "ユーザー登録";
@@ -56,8 +21,8 @@ export const UserCreate: FC = () => {
 
   const navigate = useNavigate();
   const openConfirmDialog = () => {
-    handleClickOpen()
-  }
+    handleClickOpen();
+  };
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,27 +34,43 @@ export const UserCreate: FC = () => {
 
   const handleOK = async () => {
     try {
-      await axios.post("http://localhost:3001/users", {
-        mail, age, gender, job, interests
-      });
-      setMessage({text:"ユーザーの登録が完了しました。",type:"success"});
-      navigate("/users")
-    } catch(e) {
-      setMessage({text:"ユーザーの登録に失敗しました。",type:"error"})
+      const user = methods.getValues();
+      await create(user);
+      setMessage({ text: "ユーザーの登録が完了しました。", type: "success" });
+      navigate("/users");
+    } catch (e) {
+      setMessage({ text: "ユーザーの登録に失敗しました。", type: "error" });
     } finally {
       setOpen(false);
     }
   };
 
+  const { age, userName, gender, interests, job, mail } = useDomain();
+  const createSchema = yup
+    .object()
+    .required()
+    .shape({ age, name: userName, gender, interests, job, mail });
+
+  const methods = useForm<UserTypes>({
+    defaultValues: {
+      name: "",
+      age: null,
+      mail: "",
+      job: "",
+      gender: 1,
+      interests: [],
+    },
+    resolver: yupResolver(createSchema),
+  });
+
   return (
     <>
-      <UserContext.Provider value={userFormValue}>
-        <Card sx={{ p: 2 }}>
-          <Typography variant="h4" color="gray" sx={{ mb: 2 }}>
-            ユーザー登録
-          </Typography>
-
-          <UserForm />
+      <Card sx={{ p: 2 }}>
+        <Typography variant="h4" color="gray" sx={{ mb: 2 }}>
+          ユーザー登録
+        </Typography>
+        <FormProvider {...methods}>
+          <UserCreateForm />
           <Grid container justifyContent="end" alignContent="">
             <Grid
               item
@@ -99,13 +80,18 @@ export const UserCreate: FC = () => {
               alignContent={"center"}
             >
               <Button variant="outlined" onClick={openConfirmDialog}>
-                更新
+                登録
               </Button>
-              <UserConfirmDialog open={open} handleClose={handleClose} handleOK={handleOK}/>
+              <UserConfirmDialog
+                open={open}
+                action={"create"}
+                handleClose={handleClose}
+                handleOK={handleOK}
+              />
             </Grid>
           </Grid>
-        </Card>
-      </UserContext.Provider>
+        </FormProvider>
+      </Card>
     </>
   );
 };

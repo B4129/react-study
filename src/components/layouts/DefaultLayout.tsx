@@ -17,24 +17,25 @@ export const DefaultLayout = () => {
 
   const handleClose = () => {
     setState({ ...state, open: false });
-    setMessage(undefined)
+    setMessage(undefined);
   };
   useEffect(() => {
     // setMessage(undefined);
   }, [location.pathname]);
   return (
     <Box sx={{ height: "100vh" }}>
-      {message &&    <Snackbar
+      {message && (
+        <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={open}
           autoHideDuration={6000}
           onClose={handleClose}
-      >
-        <Alert severity={message.type} sx={{ width: "100%" }}>
-          {message.text}
-        </Alert>
-      </Snackbar>}
-
+        >
+          <Alert severity={message.type} sx={{ width: "100%" }}>
+            {message.text}
+          </Alert>
+        </Snackbar>
+      )}
 
       <Grid
         container

@@ -1,15 +1,16 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { FC, useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../../../context/UserContext";
+import { FC } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
 export const Interests: FC = () => {
-  const { interests, setInterests } = useContext(UserContext);
+  const { control, setValue, getValues } = useFormContext(); // retrieve all hook methods
+
   const onChangeInterests = (e: any, value: any) => {
     const values = value.map((option: any) => {
       if (typeof option === "string") return option;
       return option.value;
     });
-    setInterests(values);
+    setValue("interests", values);
   };
   type InterestsOptionTypes = { label: string; value: string }[];
   const interestsOptions: InterestsOptionTypes = [
@@ -36,16 +37,27 @@ export const Interests: FC = () => {
   ];
 
   return (
-    <Autocomplete
-      multiple
-      freeSolo
-      defaultValue={interests}
-      id="tags-outlined"
-      options={interestsOptions}
-      onChange={onChangeInterests}
-      autoSelect
-      renderInput={(params) => (
-        <TextField {...params} variant="standard" label="趣味" />
+    <Controller
+      control={control}
+      name={"interests"}
+      render={({ field: { onChange, value } }) => (
+        <Autocomplete
+          multiple
+          freeSolo
+          id="tags-outlined"
+          options={interestsOptions}
+          onChange={onChangeInterests}
+          autoSelect
+          value={value}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              onChange={onChange}
+              label="趣味"
+            />
+          )}
+        />
       )}
     />
   );

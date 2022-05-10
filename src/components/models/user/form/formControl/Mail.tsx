@@ -1,18 +1,20 @@
-import { TextField } from "@mui/material";
+import { FormHelperText, TextField } from "@mui/material";
 import { FC, useContext } from "react";
-import { UserContext } from "../../../../../context/UserContext";
+import { useFormContext } from "react-hook-form";
 
 export const Mail: FC = () => {
-  const { mail, setMail } = useContext(UserContext);
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext(); // retrieve all hook methods
 
   return (
-    <TextField
-      label={"メールアドレス"}
-      value={mail}
-      variant="standard"
-      onChange={(e) => {
-        setMail(e.target.value);
-      }}
-    />
+    <>
+      <TextField
+        label={"メールアドレス"}
+        {...register("mail")}
+        variant="standard"
+      />
+    </>
   );
 };

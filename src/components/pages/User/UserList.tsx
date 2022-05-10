@@ -1,34 +1,17 @@
 import { Box, Button, Card, Grid } from "@mui/material";
-import { SetStateAction, useContext, useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
-import { MessageContext } from "../../../context/MessageContext";
+import { useEffect } from "react";
 import { UserTable } from "../../models/user/Table";
 import { useNavigate } from "react-router-dom";
+import { useFetchUsers } from "../../../hooks/users/useFetchUsers";
 
 export const UserList = () => {
-  const { setMessage } = useContext(MessageContext);
-
   const navigate = useNavigate();
-
-  const [rows, setRows] = useState<SetStateAction<any>>([]);
 
   useEffect(() => {
     document.title = "ユーザー一覧";
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await axios.get<AxiosResponse>(
-          "http://localhost:3001/users"
-        );
-        setRows(data?.data);
-      } catch {
-        setMessage({text:"データの取得に失敗しました",type:"error"});
-        setRows([]);
-      }
-    })();
-  }, []);
+  const { users } = useFetchUsers();
 
   return (
     <>
@@ -51,7 +34,7 @@ export const UserList = () => {
           </Grid>
         </Grid>
         <Box mx={2}>
-          <UserTable rows={rows} />
+          <UserTable rows={users} />
         </Box>
       </Card>
     </>
