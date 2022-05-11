@@ -1,11 +1,12 @@
-import { Autocomplete, TextField } from "@mui/material";
+import {Autocomplete, Checkbox, FormControl, FormControlLabel, TextField} from "@mui/material";
 import { FC } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 export const Interests: FC = () => {
-  const { control, setValue, getValues } = useFormContext(); // retrieve all hook methods
+  const { control, setValue} = useFormContext(); // retrieve all hook methods
 
   const onChangeInterests = (e: any, value: any) => {
+    console.log("aaa")
     const values = value.map((option: any) => {
       if (typeof option === "string") return option;
       return option.value;
@@ -40,7 +41,7 @@ export const Interests: FC = () => {
     <Controller
       control={control}
       name={"interests"}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: {  value } }) => (
         <Autocomplete
           multiple
           freeSolo
@@ -52,8 +53,8 @@ export const Interests: FC = () => {
           renderInput={(params) => (
             <TextField
               {...params}
+              value={value}
               variant="standard"
-              onChange={onChange}
               label="趣味"
             />
           )}

@@ -46,6 +46,7 @@ export const UserEdit: FC = () => {
       mail: "",
       job: "",
       gender: 0,
+      interests:[]
     },
     resolver: yupResolver(updateSchema),
   });

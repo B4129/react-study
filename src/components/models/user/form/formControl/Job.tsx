@@ -27,7 +27,7 @@ export const Job: FC = () => {
     <Controller
       control={control}
       name={"job"}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: {  value } }) => (
         <Autocomplete
           disablePortal
           freeSolo
@@ -42,7 +42,6 @@ export const Job: FC = () => {
             <TextField
               {...params}
               label={"職業"}
-              onChange={onChange}
               variant="standard"
             />
           )}
